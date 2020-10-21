@@ -3,6 +3,8 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 /* Import page components */
 import Homepage from './components/pages/Homepage';
+import UserAchievements from './components/pages/UserAchievements';
+import GameAchievementList from './components/pages/GameAchievementList';
 
 /* App route configuration */
 const App = () =>{
@@ -10,6 +12,8 @@ const App = () =>{
     <Router>
       <Switch>
         <Route path='/' exact component = {Homepage}/>
+        <Route path='/userAchievements' exact component = {UserAchievements}/>
+        <Route path='/gameAchievements' exact component = {GameAchievementList}/>
       </Switch>
     </Router>
   )
