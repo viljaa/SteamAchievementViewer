@@ -1,22 +1,19 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const gamesCollection = new Schema({
-    appID:{
-        type:Number,
-        required:true
-    },
-    title:{
-        type:String,
-        required:true
-    },
-    achievements:[
-       {
-            id:Number,
-            name:String,
-            description:String,
-            rarity:Number,
-            picture_url:String
+const gameSchema = new Schema({
+    appID: String,
+    achievementSchema:{
+        game:{
+            gameName: String,
+            gameVersion: String,
+            availableGameStats:{
+                achievements: {
+                    type: String
+                }
+            }
         }
-    ]
+    }
 });
+
+module.exports = mongoose.model('gameSchemaModel', gameSchema, 'gameSchemas');
