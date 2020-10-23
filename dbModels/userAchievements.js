@@ -3,18 +3,14 @@ const Schema = mongoose.Schema;
 
 const userAchievementsSchema = new Schema({
     steamID:String,
-    games:{
-        appID:{
-            playerstats:{
-                steamID:String,
-                gameName: String,
-                achievements:{
-
-                }
-            }
+    appID:String,
+    achievementdata:{
+        playerstats:{
+            steamID:String,
+            gameName: String,
+            achievements:{}
         }
-
     }
-})
+},{strict:false})
 
 module.exports = mongoose.model('userAchievementModel', userAchievementsSchema, 'userAchievements');

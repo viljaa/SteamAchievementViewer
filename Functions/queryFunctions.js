@@ -14,8 +14,8 @@ const connectionString = process.env.DB_CONN_STRING;
 const uri = connectionString;
 mongoose.connect(uri, {useNewUrlParser:true, useUnifiedTopology:true});
 // Import models
-const gameSchemaModel = require('../DB_Models/gameModel');
-const userAchievementModel = require('../DB_Models/userAchievements');
+const gameSchemaModel = require('../dbModels/gameModel');
+const userAchievementModel = require('../dbModels/userAchievements');
 
 
 
@@ -26,8 +26,8 @@ function insertSchemas(idArray, apiKey){
     // Wait until connection is established
     mongoose.connection.once('open',()=>{
         idArray.map((id)=>{
-            // Check appID already has a schema saved in the database
-            gameSchemaModel.countDocuments({appID:id},(err,res) => {
+            // Check app already has a schema saved in the database
+            gameSchemaModel.countDocuments({app:id},(err,res) => {
                 if (err){
                     console.log(err);
                 } 
@@ -36,14 +36,14 @@ function insertSchemas(idArray, apiKey){
                     console.log('Fetching schema...');
                     axios.get(`http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=${apiKey}&appid=${id}`)
                     .then(res =>{
-                        console.log(`appID: ${id} --- GAME: ${res.data.game.gameName}`);
+                        console.log(`app: ${id} --- GAME: ${res.data.game.gameName}`);
                         // Push schema to database collection
-                        mongoose.connection.collection('gameSchemas').insertOne({appID:id,achievementSchema:res.data},(err,res)=>{
+                        mongoose.connection.collection('gameSchemas').insertOne({app:id,achievementSchema:res.data},(err,res)=>{
                             if (err){
                                 console.log(err);
                             }
                             else{
-                                console.log(`Schema saved with appID ${id}`);
+                                console.log(`Schema saved with app ${id}`);
                             }
                         })
                     })
@@ -60,10 +60,26 @@ function insertSchemas(idArray, apiKey){
 function pushUserAchievements(achievementList,steamID){
     // Check connection
     mongoose.connection.once('open', ()=>{
-        achievementList.map((appID)=>{
-            //Update query here
-        })
-    })
+        achievementList.map((app)=>{
+            let query = {
+                steamID:steamID,
+                appID:app.appId
+            };
+
+            let newData = {
+                steamID:steamID,
+                appID:app.appId,
+                achievementdata:app.data
+            };
+
+            userAchievementModel.findOneAndUpdate(query, newData, {upsert:true}, (err)=>{
+                if (err) console.log(err);
+                else{
+                    console.log(`Updates completed succesfully for user ${steamID} and appID ${app.appId}`);
+                }
+            });
+        });
+    });
 }
 
 module.exports = {
@@ -91,17 +107,21 @@ module.exports = {
         // Create array for storing API results for different games
         let achievementUpdates = [];
 
-        appIDs.map((id)=>{
+        appIDs.map((appId)=>{
             // Get users achievements for the game from API
-            axios.get(`http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${id}&key=${apiKey}&steamid=${steamID}`)
+            axios.get(`http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${appId}&key=${apiKey}&steamid=${steamID}`)
             .then(res =>{
-                achievementUpdates[i] = res.data;
-                // Save updates to database
-                pushUserAchievements(achievementUpdates, steamID);
+                achievementUpdates.push({
+                    appId: appId,
+                    data: res.data
+                });
             })
             .catch(err=>{
                 console.log(err);
             })
         })
+        pushUserAchievements(achievementUpdates, steamID)
+
+        return true;
     }
 }

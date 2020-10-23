@@ -5,13 +5,11 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 require('dotenv').config();
-
-// Own modules:
-const dbQuery = require('./Functions/queryFunctions.js');
+const dbQuery = require('./functions/queryFunctions.js');
 
 /* Environment variables */
 const apiKey = process.env.API_KEY;
-const steamID = process.env.STEAM_ID; // Only for dev purposes, will be deleted later before production
+const steamID = process.env.STEAM_ID; // Only for dev purposes, will be deleted later before deployment
 
 /* App setup */
 const app = express();
@@ -36,4 +34,8 @@ app.get('/*', (req,res)=>{
 });
 
 // Testing queries, temporary form, will be deleted later
-dbQuery.updateSchemas(steamID,apiKey);
+
+//dbQuery.updateSchemas(steamID,apiKey);
+
+/*let idArray = ['35140','8980']
+dbQuery.updateUserAchievements(steamID,apiKey,idArray);*/

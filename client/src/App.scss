@@ -1,0 +1,12 @@
+@charset 'utf-8';
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap');
+
+// Other styles
+$deepblue:#09224a;
+
+// Update Bulma styles
+$primary: $deepblue;
+$family-sans-serif: 'Noto Sans JP', sans-serif;
+$navbar-height:4rem;
+
+@import 'bulma/bulma.sass';
