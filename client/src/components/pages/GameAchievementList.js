@@ -1,7 +1,7 @@
 import React from 'react';
 
 /* Import components */
-import AchievementBlock from '../elements/AchievementBlock';
+import AchievementBlock from '../elements/universal/AchievementBlock';
 
 // Test object
 const data = {

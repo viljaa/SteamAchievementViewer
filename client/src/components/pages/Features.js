@@ -3,15 +3,13 @@ import '../../App.scss';
 
 // Import components
 import Navbar from '../elements/universal/Navbar.js'
-import HomeContainer from '../elements/HomeContainer.js'
 
-const Homepage = () =>{
+const Features = () =>{
     return(
         <div className='container is-max-widescreen'>
             <Navbar />
-            <HomeContainer />
         </div>
     )
 };
 
-export default Homepage;
+export default Features;

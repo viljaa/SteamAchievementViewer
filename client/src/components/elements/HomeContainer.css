@@ -1,0 +1,27 @@
+#searchBox{
+    background-image: url('https://steamuserimages-a.akamaihd.net/ugc/960856720987058879/027108D90926F2FD3B2F2694CBD2EC5DCACEDC93/');
+    background-position: center;
+}
+
+#searchBoxImg{
+    opacity: 0.9;
+}
+
+#searchBoxOverlay{
+    display: initial;
+}
+
+#searchBoxSmallScreen{
+    display: none;
+}
+
+/* Media queries */
+@media screen and (max-width: 1215px){
+    #searchBoxOverlay{
+        display:none;
+    }
+
+    #searchBoxSmallScreen{
+        display:initial;
+    }
+}
