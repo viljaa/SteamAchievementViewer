@@ -4,14 +4,16 @@
 
 // Other styles
 $deepblue:#09224a;
-$defaultText-font-weight: 300;
 
 // Update Bulma styles
 $primary: $deepblue;
 $family-sans-serif: 'Noto Sans JP', sans-serif;
 $navbar-height:4rem;
+$navbar-item-img-max-height: 3.5rem;
 $spacing-values: (
-    'large':13rem
+    '2':2rem,
+    'large':13rem,
+    'larger':25rem
 );
 
 @import 'bulma/bulma.sass';

@@ -121,7 +121,18 @@ module.exports = {
             })
         })
         pushUserAchievements(achievementUpdates, steamID)
+    },
 
-        return true;
+    /* Function for getting all appId's related to a singe steamId from the database*/
+    getUserAppIdsDB: async function getUserAppIds(steamId){
+        // Get Id's from the database
+        const data = await userAchievementModel.find({'steamID':steamId}).exec();
+        // Return the data in an array by utilizing array.map default array
+        return data.map((id)=>id.appID);
+    },
+
+    /* Function for getting all appId's related to a single steamId from the Steam Web API */
+    getUserAppIdsAPI: function getUserAppIdsAPI(steamId, apiKey){
+        // TODO
     }
 }

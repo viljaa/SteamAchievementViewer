@@ -33,7 +33,11 @@ app.get('/*', (req,res)=>{
     res.sendFile(__dirname + '/client/build/index.html');
 });
 
-// Testing queries, temporary form, will be deleted later
+// Testing queries, temporary, will be deleted later
+
+/*dbQuery.getUserAppIdsDB(steamID).then((res)=>{
+    // Here is where you utilize the result
+});*/
 
 //dbQuery.updateSchemas(steamID,apiKey);
 

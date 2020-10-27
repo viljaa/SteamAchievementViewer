@@ -4,7 +4,7 @@
 }
 
 #searchBoxImg{
-    opacity: 0.9;
+    opacity: 1;
 }
 
 #searchBoxOverlay{
@@ -15,6 +15,23 @@
     display: none;
 }
 
+#textOverlay{
+    display: initial;
+}
+
+#textOverlaySmallScreen{
+    display: none;
+}
+
+.toned_background{
+    background-color: rgba(66, 66, 66, 0.3);
+}
+
+/*Text*/
+.imgOverlay_text{
+    color:white;
+}
+
 /* Media queries */
 @media screen and (max-width: 1215px){
     #searchBoxOverlay{
@@ -22,6 +39,16 @@
     }
 
     #searchBoxSmallScreen{
+        display:initial;
+    }
+}
+@media screen and (max-width: 935px){
+    #textOverlay{
+        display: none;
+    }
+}
+@media screen and (min-width: 555px) and (max-width: 935px){
+    #textOverlaySmallScreen{
         display:initial;
     }
 }

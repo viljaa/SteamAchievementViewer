@@ -1,9 +1,9 @@
 import React from 'react';
-import '../../App.scss';
+import '../../../App.scss';
 
 // Import components
-import Navbar from '../elements/universal/Navbar.js'
-import HomeContainer from '../elements/HomeContainer.js'
+import Navbar from '../../elements/universal/Navbar.js'
+import HomeContainer from './Home-Components/HomeContainer.js'
 
 const Homepage = () =>{
     return(
