@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
+import socket from '../../../socket/Socket.js'
 
 //Styles
 import '../../../App.scss';
@@ -8,6 +9,17 @@ import './SteamIdSearch.css';
 const SteamIdSearchBar = (props) =>{
 
     const [steamId, setSteamId] = useState('');
+
+    /* Socket emit events */
+
+    // Function that emits event that triggers either update or view action in the backend
+    // Modifier prop: 1=update 0=view
+    function searchbarAction(id,modifier){
+        socket.emit('searchbarAction', {
+            steamId:id,
+            doesUpdate:modifier
+        });
+    }
 
     return(
         <div className='box radius-large' id={props.id}>
@@ -23,8 +35,8 @@ const SteamIdSearchBar = (props) =>{
                 <div className='tile is-child is-1'></div>
                 <div className='tile is-child is-2'>
                     <p className='buttons'>
-                        <Link className='button is-dark' to={`/userAchievements?steamId=${steamId}`}>Update</Link>
-                        <Link className='button is-dark' to={`/userAchievements?steamId=${steamId}`}>View</Link>
+                        <Link className='button is-dark' to={`/userAchievements?steamId=${steamId}`} onClick={()=>searchbarAction(steamId,1)}>Update</Link>
+                        <Link className='button is-dark' to={`/userAchievements?steamId=${steamId}`} onClick={()=>searchbarAction(steamId,0)}>View</Link>
                     </p>
                 </div>
             </div>

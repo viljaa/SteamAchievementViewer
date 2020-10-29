@@ -4,6 +4,7 @@
 const express = require('express');
 const path = require('path');
 const http = require('http');
+const socket = require('socket.io');
 require('dotenv').config();
 const dbQuery = require('./functions/queryFunctions.js');
 
@@ -16,10 +17,8 @@ const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 5000;
 
-/* Mongoose setup */
-
-//Import model
-
+/* Socket setup */
+const io = socket(server);
 
 // Serving React client
 app.use(express.static(path.join(__dirname, '/client/build')));
@@ -33,7 +32,28 @@ app.get('/*', (req,res)=>{
     res.sendFile(__dirname + '/client/build/index.html');
 });
 
+/* Listening to socket events */
+io.on('connection', (socket)=>{
+    console.log(`Client ${socket.id} connected.`);
+
+    socket.on('searchbarAction',(data)=>{
+        if(data.doesUpdate==1){
+            // Update schemas and user achievements
+            /*dbQuery.updateSchemas(data.steamId, apiKey, ()=>{
+                dbQuery.updateUserAchievements(data.steamId, apiKey, )
+            });*/
+        }
+        else if(data.doesUpdate==0){
+            // Start viewing process
+        }
+    })
+    
+});
 // Testing queries, temporary, will be deleted later
+
+/*dbQuery.getUserAppIdsAPI(data.steamId, apiKey).then((res)=>{
+    console.log('ID ARRAY ---- '+res);
+})*/
 
 /*dbQuery.getUserAppIdsDB(steamID).then((res)=>{
     // Here is where you utilize the result

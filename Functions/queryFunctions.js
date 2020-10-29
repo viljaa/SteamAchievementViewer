@@ -43,7 +43,7 @@ function insertSchemas(idArray, apiKey){
                                 console.log(err);
                             }
                             else{
-                                console.log(`Schema saved with app ${id}`);
+                                console.log(`Schema saved with appID ${id}`);
                             }
                         })
                     })
@@ -56,7 +56,7 @@ function insertSchemas(idArray, apiKey){
     })
 }
 
-/* NOT FINISHED! --- Function for saving updated user achievement stats to database */
+/* Function for saving updated user achievement stats to database */
 function pushUserAchievements(achievementList,steamID){
     // Check connection
     mongoose.connection.once('open', ()=>{
@@ -75,7 +75,7 @@ function pushUserAchievements(achievementList,steamID){
             userAchievementModel.findOneAndUpdate(query, newData, {upsert:true}, (err)=>{
                 if (err) console.log(err);
                 else{
-                    console.log(`Updates completed succesfully for user ${steamID} and appID ${app.appId}`);
+                    console.log(`Updates completed succesfully for user ${steamID} appID ${app.appId}`);
                 }
             });
         });
@@ -86,19 +86,10 @@ module.exports = {
     /* Function for updating schemas to DB. Can be used when adding new users or when user manually updates their
         game library. */
     updateSchemas: function updateSchemas(steamID, apiKey){
-        let appIDs = [];
-        // Make query to fetch a list of users appIDs
-        axios.get(`http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${steamID}&format=json`)
-        .then(res => {
-            console.log(res.data);
-            for (i in res.data.response.games){
-                appIDs[i] = res.data.response.games[i].appid.toString();
-            };
+        this.getUserAppIdsAPI(steamID, apiKey).then((res)=>{
+            const idArray = res;
             // Get schemas for games from the API, that don't exist in the database. Insert new schemas to database. More info on the function.
-            insertSchemas(appIDs, apiKey);
-        })
-        .catch(err=>{
-            console.log(err);
+            insertSchemas(idArray, apiKey);
         });
     },
 
@@ -131,8 +122,27 @@ module.exports = {
         return data.map((id)=>id.appID);
     },
 
-    /* Function for getting all appId's related to a single steamId from the Steam Web API */
-    getUserAppIdsAPI: function getUserAppIdsAPI(steamId, apiKey){
-        // TODO
+    /* Function for getting all appId's related to a single steamId from the Steam Web API. Returns an array of appIds. */
+    getUserAppIdsAPI: async function getUserAppIdsAPI(steamId, apiKey){
+        const getOwnedGames = async (steamId, apiKey) =>{
+            try{
+                const games = await axios.get(`http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${steamId}&format=json`);
+                return games;
+            } catch(err) {
+                console.log(err);
+            }
+        }
+
+        const makeIdArray = async (steamId, apiKey) =>{
+            try{
+                const ids = await getOwnedGames(steamId, apiKey);
+                return ids.data.response.games.map((game) => game.appid.toString());
+            } catch(err){
+                console.log(err);
+            }
+        }
+
+        const idArray = await makeIdArray(steamId,apiKey);
+        return idArray;
     }
 }
