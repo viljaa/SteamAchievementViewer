@@ -1,7 +1,6 @@
 import React from 'react';
 
 /* Import components */
-import AchievementBlock from '../elements/universal/AchievementBlock';
 
 // Test object
 const data = {
@@ -14,7 +13,6 @@ const GameAchievementList = () =>{
     return(
         <div>
             <p>This is the list of achievements in a game.</p>
-            <AchievementBlock data={data}/>
         </div>
     )
 };

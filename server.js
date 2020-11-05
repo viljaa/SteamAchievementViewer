@@ -37,6 +37,7 @@ io.on('connection', (socket)=>{
     console.log(`Client ${socket.id} connected.`);
 
     socket.on('searchbarAction',(data)=>{
+        console.log('viewquery triggered');
         if(data.doesUpdate==1){
             // Update schemas and user achievements
             /*dbQuery.updateSchemas(data.steamId, apiKey, ()=>{
@@ -45,7 +46,17 @@ io.on('connection', (socket)=>{
         }
         else if(data.doesUpdate==0){
             // Start viewing process
+            dbQuery.getUserAchievementsDB(data.steamId).then((res)=>{
+                //Send result array to client
+                socket.emit('gamelistData', res);
+            })
         }
+    })
+
+    // UNFINISHED - socket event for manual update for a single game
+    socket.on('updateOneGame', (data)=>{
+        console.log(data.steamId);
+        console.log(data.appId);
     })
     
 });

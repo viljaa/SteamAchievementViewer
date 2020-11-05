@@ -144,5 +144,12 @@ module.exports = {
 
         const idArray = await makeIdArray(steamId,apiKey);
         return idArray;
+    },
+
+    /* Function for getting user achievements for all games with the specified stemId into one array */
+    getUserAchievementsDB: async function getUserAchievementsDB(steamId){
+        // Get achievement stats, array sorted aplhabetically
+        const data = await userAchievementModel.find({'steamID':steamId}).sort({'achievementdata.playerstats.gameName':1}).exec();
+        return data;
     }
 }
