@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import socket from '../../../socket/Socket.js'
 
 //Styles
@@ -9,11 +9,34 @@ import './SteamIdSearch.css';
 const SteamIdSearchBar = (props) =>{
 
     const [steamId, setSteamId] = useState('');
+    const [isValid,setIsValid] = useState(true);
+    const [redirect, setRedirect] = useState(false);
+    const [updateBtnClass, setUpdateBtnClass] = useState('button is-dark');
+
+    /* Functions */
+
+    //Function for validating input, modifier parameter: 1=update 0=view
+    function validateInput(event,modifier){
+        if(steamId.length < 1){
+            event.preventDefault();
+            setIsValid(false);
+        }
+        else if(steamId.length > 1 && modifier==1){
+            // Note: searchbarAction event emitted at this state only if user updates data, since view event is always triggered on UserAchievements page load/refresh.
+            searchbarAction(steamId,modifier);
+            setUpdateBtnClass('button is-dark is-loading');
+            
+            // Redirect to UserAchievements page after updates are finished and client gets confirmation from server
+            socket.on('updateDone',()=>{
+                console.log('Redirect triggered')
+                setRedirect(true);
+            })
+        }
+    }
 
     /* Socket events */
 
     // Function that emits event that triggers either update or view action in the backend
-    // Modifier parameter: 1=update 0=view
     function searchbarAction(id,modifier){
         socket.emit('searchbarAction', {
             steamId:id,
@@ -31,15 +54,19 @@ const SteamIdSearchBar = (props) =>{
                     <input className="input" type="text" placeholder="SteamID" onChange={
                         (event) => setSteamId(event.target.value)
                     }/>
+                    {!isValid &&
+                        <p className='white-text'>Invalid input!</p>
+                    }
                 </div>
                 <div className='tile is-child is-1'></div>
                 <div className='tile is-child is-2'>
                     <p className='buttons'>
-                        <Link className='button is-dark' to={`/userAchievements?steamId=${steamId}&update=1`} onClick={()=>searchbarAction(steamId,1)}>Update</Link>
-                        <Link className='button is-dark' to={`/userAchievements?steamId=${steamId}&update=0`} onClick={()=>searchbarAction(steamId,0)}>View</Link>
+                        <button className={updateBtnClass} onClick={(event)=>validateInput(event,1)}>Update</button>
+                        <Link className='button is-dark' to={`/userAchievements?steamId=${steamId}&update=0`} onClick={(event)=>validateInput(event,0)}>View</Link>
                     </p>
                 </div>
             </div>
+            {redirect ? (<Redirect push to={`/userAchievements?steamId=${steamId}&update=1`} />):null}
         </div>
     )
 };

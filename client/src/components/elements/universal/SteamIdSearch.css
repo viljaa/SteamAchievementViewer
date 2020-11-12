@@ -6,6 +6,10 @@
     color:white;
 }
 
+.white-text{
+    color:white;
+}
+
 /*Animations*/
 #toned_box:hover{
     transform: scale(1.003);

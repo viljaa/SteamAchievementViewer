@@ -17,11 +17,10 @@ const UserAchievements = () =>{
     useEffect(()=>{
         let url = new URL(window.location.href);
         let id = url.searchParams.get('steamId');
-        let modifier = url.searchParams.get('update');
 
         socket.emit('searchbarAction', {
             steamId:id,
-            doesUpdate:modifier
+            doesUpdate:0  // Always triggers view event to prevent spamming update queries to API
         });
     },[])
 
@@ -46,16 +45,18 @@ const UserAchievements = () =>{
     return(
         <div className='container is-max-widescreen'>
             <Navbar />
-            <div>{/* Visualization graphs implemented here */}</div>
+            <div>
+                {/* Visualization graphs implemented here */}
+            </div>
             <div className='box' box-radius='large'>
                 {resultArray.map((app)=>{
                     const propsObj = {
                         appId:app.appID,
                         gameName:app.achievementdata.playerstats.gameName,
-                        progress: 60,
+                        progress: app.progress.percentage,
                         achievements:{
-                            total:10,
-                            achieved:6
+                            total:app.achievementdata.playerstats.achievements.length,
+                            achieved:app.progress.achievedCount
                         },
                         completed: 1
                     };

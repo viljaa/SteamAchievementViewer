@@ -58,9 +58,11 @@ function insertSchemas(idArray, apiKey){
 
 /* Function for saving updated user achievement stats to database */
 function pushUserAchievements(achievementList,steamID){
+    console.log('PUSH STARTED. CONNETION STATE:' + mongoose.connection.readyState);
     // Check connection
-    mongoose.connection.once('open', ()=>{
-        achievementList.map((app)=>{
+    if(mongoose.connection.readyState == 1){
+        console.log('CONNECTED TO DATABASE.')
+        achievementList.forEach((app)=>{
             let query = {
                 steamID:steamID,
                 appID:app.appId
@@ -69,9 +71,14 @@ function pushUserAchievements(achievementList,steamID){
             let newData = {
                 steamID:steamID,
                 appID:app.appId,
-                achievementdata:app.data
+                achievementdata:app.response.data,
+                progress:{
+                    achievedCount:countAchieved(app.response.data.playerstats.achievements),
+                    percentage: countProgress(app.response.data.playerstats.achievements)
+                }
             };
 
+            // Query updates existing object in DB if match is found, otherwise creates a new object
             userAchievementModel.findOneAndUpdate(query, newData, {upsert:true}, (err)=>{
                 if (err) console.log(err);
                 else{
@@ -79,9 +86,37 @@ function pushUserAchievements(achievementList,steamID){
                 }
             });
         });
-    });
+    }
+    else{
+        console.log('No database connection.')
+    }
 }
 
+/* HELPER FUNCTIONS */
+/* Function for counting amount of achieved achievements in a game */
+function countAchieved(achievementArray){
+    let amount = 0;
+
+    try{
+        achievementArray.forEach((achievement)=>{
+            if(achievement.achieved==1){
+                amount++;
+            }
+        });
+    }catch(err){
+        console.log(err)
+    }
+
+    return amount;
+}
+/*Function for counting the achievement progress percentage, outputs rounded integer*/
+function countProgress(achievementArray){
+    let progress = countAchieved(achievementArray)/achievementArray.length;
+
+    return Math.round(progress*100);
+}
+
+/* EXPORTS -- Functions that are exported for use outside of the module*/
 module.exports = {
     /* Function for updating schemas to DB. Can be used when adding new users or when user manually updates their
         game library. */
@@ -93,25 +128,41 @@ module.exports = {
         });
     },
 
-    /* Function for updating user achievements to DB. Works similar to updateSchemas()-function. */
-    updateUserAchievements: function updateUserAchievements(steamID, apiKey, appIDs){  // appIDs is an array that configures the amount of updated games
-        // Create array for storing API results for different games
-        let achievementUpdates = [];
+    /* Function for updating user achievements to DB. */
+    updateUserAchievements: async function updateUserAchievements(steamId, apiKey, appIDs){  // appIDs is an array that configures the amount of updated games
 
-        appIDs.map((appId)=>{
-            // Get users achievements for the game from API
-            axios.get(`http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${appId}&key=${apiKey}&steamid=${steamID}`)
-            .then(res =>{
-                achievementUpdates.push({
+        const getGameAchievements = async (steamId, appId, apiKey)=>{
+            try{
+                const achObj = {
                     appId: appId,
-                    data: res.data
-                });
+                    response:await axios.get(`http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${appId}&key=${apiKey}&steamid=${steamId}`)
+                }
+                return achObj;
+            } catch(err){
+                console.log(err.message);
+            }
+        }
+        
+        const makeUpdateArray = async (idArray,steamId,apiKey)=>{
+            return Promise.all(idArray.map(appId => getGameAchievements(steamId, appId, apiKey)))
+        }
+        
+        makeUpdateArray(appIDs,steamId,apiKey).then(data =>{
+            // Filter out empty indexes that resulted from apps that aren't games
+            let preFiltered = data.filter((i)=>{
+                return i !== undefined;
             })
-            .catch(err=>{
-                console.log(err);
+            // Filter out any games which don't have any achievements
+            let filteredArray = preFiltered.filter((i)=>{
+                return i.response.data.playerstats.achievements !==undefined;
             })
+
+            filteredArray.forEach(app=>{
+                console.log(app.appId + '--' + app.response.data.playerstats.gameName);
+            })
+
+            pushUserAchievements(filteredArray, steamId);
         })
-        pushUserAchievements(achievementUpdates, steamID)
     },
 
     /* Function for getting all appId's related to a singe steamId from the database*/
@@ -124,6 +175,7 @@ module.exports = {
 
     /* Function for getting all appId's related to a single steamId from the Steam Web API. Returns an array of appIds. */
     getUserAppIdsAPI: async function getUserAppIdsAPI(steamId, apiKey){
+        console.log('STARTED FETCHING APP IDS FROM API')
         const getOwnedGames = async (steamId, apiKey) =>{
             try{
                 const games = await axios.get(`http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${steamId}&format=json`);

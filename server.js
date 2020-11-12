@@ -35,14 +35,22 @@ app.get('/*', (req,res)=>{
 /* Listening to socket events */
 io.on('connection', (socket)=>{
     console.log(`Client ${socket.id} connected.`);
-
+    
+    // Socket event for handling searchbar actions
     socket.on('searchbarAction',(data)=>{
-        console.log('viewquery triggered');
         if(data.doesUpdate==1){
+            async function startUpdate(){
+                dbQuery.updateSchemas(data.steamId, apiKey);
+                return;
+            }
             // Update schemas and user achievements
-            /*dbQuery.updateSchemas(data.steamId, apiKey, ()=>{
-                dbQuery.updateUserAchievements(data.steamId, apiKey, )
-            });*/
+            startUpdate().then(()=>{
+                dbQuery.getUserAppIdsAPI(data.steamId, apiKey).then((res)=>{  // Get IdArray needed for updateUserAchievement function.
+                    dbQuery.updateUserAchievements(data.steamId, apiKey, res).then(()=>{  // Use IdArray from result to update user achievements.
+                        socket.emit('updateDone');  // Inform client about completion of the update.
+                    })
+                })
+            })
         }
         else if(data.doesUpdate==0){
             // Start viewing process
@@ -60,7 +68,9 @@ io.on('connection', (socket)=>{
     })
     
 });
+
 // Testing queries, temporary, will be deleted later
+
 
 /*dbQuery.getUserAppIdsAPI(data.steamId, apiKey).then((res)=>{
     console.log('ID ARRAY ---- '+res);
@@ -72,5 +82,7 @@ io.on('connection', (socket)=>{
 
 //dbQuery.updateSchemas(steamID,apiKey);
 
-/*let idArray = ['35140','8980']
+/*let idArray = ['35140','8980','523489','4000','2990','6220','6910','6920','2270',
+'12120','12250','12140','12150','12750','12360','13600','17460','22320','32370','20900','32430',
+'33230','33910','33930','219540','8930'];
 dbQuery.updateUserAchievements(steamID,apiKey,idArray);*/
