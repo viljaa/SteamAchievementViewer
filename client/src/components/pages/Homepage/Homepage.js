@@ -3,7 +3,7 @@ import '../../../App.scss';
 
 // Import components
 import Navbar from '../../elements/universal/Navbar.js'
-import HomeContainer from './Home-Components/HomeContainer.js'
+import HomeContainer from './components/HomeContainer.js'
 
 const Homepage = () =>{
     return(

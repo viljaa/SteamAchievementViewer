@@ -74,7 +74,8 @@ function pushUserAchievements(achievementList,steamID){
                 achievementdata:app.response.data,
                 progress:{
                     achievedCount:countAchieved(app.response.data.playerstats.achievements),
-                    percentage: countProgress(app.response.data.playerstats.achievements)
+                    percentage: countProgress(app.response.data.playerstats.achievements),
+                    isCompleted: isCompleted(app.response.data.playerstats.achievements)
                 }
             };
 
@@ -114,6 +115,17 @@ function countProgress(achievementArray){
     let progress = countAchieved(achievementArray)/achievementArray.length;
 
     return Math.round(progress*100);
+}
+/* Function for determining if game is completed or not. */
+function isCompleted(achievementArray){
+    let percentage = countProgress(achievementArray);
+
+    if(percentage === 100){
+        return true;
+    }
+    else{
+        return false;
+    }
 }
 
 /* EXPORTS -- Functions that are exported for use outside of the module*/
