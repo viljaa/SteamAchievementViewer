@@ -39,16 +39,10 @@ io.on('connection', (socket)=>{
     // Socket event for handling searchbar actions
     socket.on('searchbarAction',(data)=>{
         if(data.doesUpdate==1){
-            async function startUpdate(){
-                dbQuery.updateSchemas(data.steamId, apiKey);
-                return;
-            }
             // Update schemas and user achievements
-            startUpdate().then(()=>{
+            dbQuery.updateSchemas(data.steamId, apiKey).then(()=>{
                 dbQuery.getUserAppIdsAPI(data.steamId, apiKey).then((res)=>{  // Get IdArray needed for updateUserAchievement function.
-                    dbQuery.updateUserAchievements(data.steamId, apiKey, res).then(()=>{  // Use IdArray from result to update user achievements.
-                        socket.emit('updateDone');  // Inform client about completion of the update.
-                    })
+                    dbQuery.updateUserAchievements(data.steamId, apiKey, res, socket) // Use IdArray from result to update user achievements.
                 })
             })
         }

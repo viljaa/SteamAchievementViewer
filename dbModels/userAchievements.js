@@ -11,6 +11,6 @@ const userAchievementsSchema = new Schema({
             achievements:{}
         }
     }
-},{strict:false})
+},{strict:false,collation:{locale:'en',strength:1}})
 
 module.exports = mongoose.model('userAchievementModel', userAchievementsSchema, 'userAchievements');

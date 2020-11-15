@@ -24,7 +24,7 @@ const userAchievementModel = require('../dbModels/userAchievements');
 /* Function for getting schemas from the API. Gets only the schemas that don't already exist in the database.*/
 function insertSchemas(idArray, apiKey){
     // Wait until connection is established
-    mongoose.connection.once('open',()=>{
+    if(mongoose.connection.readyState == 1){
         idArray.map((id)=>{
             // Check app already has a schema saved in the database
             gameSchemaModel.countDocuments({app:id},(err,res) => {
@@ -53,11 +53,11 @@ function insertSchemas(idArray, apiKey){
                 }
             })
         })
-    })
+    }
 }
 
 /* Function for saving updated user achievement stats to database */
-function pushUserAchievements(achievementList,steamID){
+function pushUserAchievements(achievementList,steamID, socket){
     console.log('PUSH STARTED. CONNETION STATE:' + mongoose.connection.readyState);
     // Check connection
     if(mongoose.connection.readyState == 1){
@@ -87,6 +87,8 @@ function pushUserAchievements(achievementList,steamID){
                 }
             });
         });
+
+        socket.emit('updateDone'); // Injform client when update is finished
     }
     else{
         console.log('No database connection.')
@@ -132,7 +134,7 @@ function isCompleted(achievementArray){
 module.exports = {
     /* Function for updating schemas to DB. Can be used when adding new users or when user manually updates their
         game library. */
-    updateSchemas: function updateSchemas(steamID, apiKey){
+    updateSchemas: async function updateSchemas(steamID, apiKey){
         this.getUserAppIdsAPI(steamID, apiKey).then((res)=>{
             const idArray = res;
             // Get schemas for games from the API, that don't exist in the database. Insert new schemas to database. More info on the function.
@@ -141,7 +143,7 @@ module.exports = {
     },
 
     /* Function for updating user achievements to DB. */
-    updateUserAchievements: async function updateUserAchievements(steamId, apiKey, appIDs){  // appIDs is an array that configures the amount of updated games
+    updateUserAchievements: async function updateUserAchievements(steamId, apiKey, appIDs, socket){  // appIDs is an array that configures the amount of updated games
 
         const getGameAchievements = async (steamId, appId, apiKey)=>{
             try{
@@ -173,7 +175,7 @@ module.exports = {
                 console.log(app.appId + '--' + app.response.data.playerstats.gameName);
             })
 
-            pushUserAchievements(filteredArray, steamId);
+            pushUserAchievements(filteredArray, steamId, socket);
         })
     },
 
