@@ -8,7 +8,11 @@ const userAchievementsSchema = new Schema({
         playerstats:{
             steamID:String,
             gameName: String,
-            achievements:{}
+            achievements:[{
+                apiname:String,
+                achieved:Number,
+                unlocktime: Number
+            }]
         }
     }
 },{strict:false,collation:{locale:'en',strength:1}})

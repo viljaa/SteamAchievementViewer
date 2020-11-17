@@ -11,14 +11,16 @@ const GameInfoCard = (props) =>{
     const cardImg_url = `https://steamcdn-a.akamaihd.net/steam/apps/${props.data.appId}/capsule_184x69.jpg`
     const totalAchievements = props.data.achievements.total;
 
+    // Get steamId from url
+    const url = new URL(window.location.href);
+    const steamId = url.searchParams.get('steamId');
+
+    /* States */
     const [progress, setProgress] = useState(props.data.progress);
     const [achievements, setAchievements] = useState(props.data.achievements.achieved);
 
     /* Functions */
-    function updateOneGame(appId){
-        // Get steamId from url
-        let url = new URL(window.location.href);
-        let steamId = url.searchParams.get('steamId');
+    function updateOneGame(appId, steamId){
 
         console.log(steamId + '---' + appId);
 
@@ -28,15 +30,32 @@ const GameInfoCard = (props) =>{
         })
     }
 
+    function getGameAchievemets(appId, steamId){
+        socket.emit('getGameAchievements',{appId,steamId});
+    }
+
     return(
         <div className='box' box-radius='large'>
             <div className='tile is-parent'>
                 <div className='tile is-child is-2'>
-                    <img src={cardImg_url} alt='game_image'></img>
+                    <div className='tile is-vertical is-parent'>
+                        <div className='tile is-child'>
+                            <img src={cardImg_url} alt='game_image'></img>
+                        </div>
+                    </div>
                 </div>
                 <div className='tile is-child is-1'/>
                 <div className='tile is-child is-4'>
-                    <h3 className='title is-5'>{props.data.gameName}</h3>
+                    <div className='tile is-vertical is-parent'>
+                        <div className='tile is-child'>
+                            <h3 className='title is-5'>{props.data.gameName}</h3>
+                        </div>
+                        <div className='tile is-child'>
+                            <Link className='button is-dark' to={`/gameAchievements?appId=${props.data.appId}&steamId=${steamId}`} onClick={()=>getGameAchievemets(props.data.appId, steamId)}>
+                                View achievements
+                            </Link>
+                        </div>
+                    </div>
                 </div>
                 <div className='tile is-child is-1'/>
                 <div className='tile is-child is-3'>
@@ -50,7 +69,11 @@ const GameInfoCard = (props) =>{
                     </div>
                 </div>
                 <div className='tile is-child is-1'>
-                    <button className='button is-dark' onClick={()=>updateOneGame(props.data.appId)}>Update</button>
+                    <div className='tile is-vertical is-parent'>
+                        <div className='tile is-child'>
+                            <button className='button is-dark' onClick={()=>updateOneGame(props.data.appId, steamId)}>Update</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

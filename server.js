@@ -40,7 +40,7 @@ io.on('connection', (socket)=>{
     socket.on('searchbarAction',(data)=>{
         if(data.doesUpdate==1){
             // Update schemas and user achievements
-            dbQuery.updateSchemas(data.steamId, apiKey).then(()=>{
+            dbQuery.updateSchemas(data.steamId, apiKey, socket).then(()=>{
                 dbQuery.getUserAppIdsAPI(data.steamId, apiKey).then((res)=>{  // Get IdArray needed for updateUserAchievement function.
                     dbQuery.updateUserAchievements(data.steamId, apiKey, res, socket) // Use IdArray from result to update user achievements.
                 })
@@ -59,6 +59,14 @@ io.on('connection', (socket)=>{
     socket.on('updateOneGame', (data)=>{
         console.log(data.steamId);
         console.log(data.appId);
+    })
+
+    // Socket event for getting achievement data of a single game
+    socket.on('getGameAchievements',(data)=>{
+
+        dbQuery.sortAchievementObject(data.steamId,data.appId).then((res)=>{
+            socket.emit('gameAchievementData', res);
+        });
     })
     
 });

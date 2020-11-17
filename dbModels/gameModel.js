@@ -8,9 +8,15 @@ const gameSchema = new Schema({
             gameName: String,
             gameVersion: String,
             availableGameStats:{
-                achievements: {
-                    type: String
-                }
+                achievements: [{
+                    name: String,
+                    defaultValue:Number,
+                    displayName: String,
+                    hidden: Number,
+                    description:String,
+                    icon:String,
+                    icongray:String
+                }]
             }
         }
     }

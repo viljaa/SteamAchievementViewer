@@ -134,12 +134,24 @@ function isCompleted(achievementArray){
 module.exports = {
     /* Function for updating schemas to DB. Can be used when adding new users or when user manually updates their
         game library. */
-    updateSchemas: async function updateSchemas(steamID, apiKey){
+    updateSchemas: async function updateSchemas(steamID, apiKey, socket){
         this.getUserAppIdsAPI(steamID, apiKey).then((res)=>{
             const idArray = res;
-            // Get schemas for games from the API, that don't exist in the database. Insert new schemas to database. More info on the function.
-            insertSchemas(idArray, apiKey);
+            if(idArray===undefined){
+                console.log('Update cancelled.');
+                // Inform client that updates couldn't be done, getUserAppIdsAPI returns undefined if Steam profile is private, since no data is received from API
+                socket.emit('unableToUpdate');
+            } else{
+                // Get schemas for games from the API, that don't exist in the database. Insert new schemas to database. More info on the function.
+                insertSchemas(idArray, apiKey);
+            }
         });
+    },
+
+    /* Funciton for getting a single schema for a game from the database */
+    getSchemaDB: async function getSchemaDB(appId){
+        const schema = await gameSchemaModel.find({'app':appId}).exec();
+        return schema;
     },
 
     /* Function for updating user achievements to DB. */
@@ -214,8 +226,48 @@ module.exports = {
 
     /* Function for getting user achievements for all games with the specified stemId into one array */
     getUserAchievementsDB: async function getUserAchievementsDB(steamId){
-        // Get achievement stats, array sorted aplhabetically
-        const data = await userAchievementModel.find({'steamID':steamId}).sort({'achievementdata.playerstats.gameName':1}).exec();
-        return data;
+        try{
+            // Get achievement stats, array sorted aplhabetically
+            const data = await userAchievementModel.find({'steamID':steamId}).sort({'achievementdata.playerstats.gameName':1}).exec();
+            return data;
+        } catch(err){
+            console.log(err);
+        }
+    },
+
+    /* Function for getting user achievements for a single game from the database.*/
+    getAchievementListDB: async function getAchievementListDB(steamId,appId){
+        try{
+            const gameAchievements = await userAchievementModel.find({'steamID':steamId,'appID':appId}).exec();
+            return gameAchievements;
+        } catch (err){
+            console.log(err);
+        }
+    },
+
+    sortAchievementObject: async function sortAchievementObject(steamId,appId){
+        try{
+            // Get schema and achievement object and store them into varibales
+            let schema = await this.getSchemaDB(appId);
+            let userAchievements = await this.getAchievementListDB(steamId,appId);
+
+            schema = schema[0].toObject();
+            userAchievements = userAchievements[0].toObject();
+
+            // Merge data from schema to userAchievements object
+            userAchievements.achievementdata.playerstats.achievements.forEach((achievement)=>{
+                // Get corresponding stat from schema with achievement apiname
+                const schemaData = schema.achievementSchema.game.availableGameStats.achievements.find(({name})=> name === achievement.apiname);
+                // Delete apiname from data to avoid multiple instances of same data in the object
+                delete schemaData.name;
+                // Add the schema data to main achievement object
+                achievement['schemaData'] = schemaData;
+            })
+
+            return userAchievements;
+        } catch(err){
+            console.log(err);
+        }
+        
     }
 }

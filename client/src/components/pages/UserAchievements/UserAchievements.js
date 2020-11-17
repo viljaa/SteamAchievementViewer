@@ -12,6 +12,7 @@ import socket from '../../../socket/Socket';
 
 const UserAchievements = () =>{
 
+    /* States */
     // State stores an array, every index cointains object which contains achievement data for one appId
     const [resultArray, setResultArray] = useState([]);
     
@@ -44,7 +45,7 @@ const UserAchievements = () =>{
                 {/* Visualization graphs implemented here */}
             </div>
             <Loader visibility={loaderVisibility}/>
-            <div className={contentVisibility} id='contentContainer'>
+            <div className={contentVisibility}>
                 <DataLevel data={{array:resultArray}} />
                 <div className='box' box-radius='large'>
                     {resultArray.map((app)=>{
