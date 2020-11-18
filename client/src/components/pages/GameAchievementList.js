@@ -12,7 +12,7 @@ import AchievementCard from '../elements/cards/AchievementCard';
 const GameAchievementList = () =>{
 
     /* States */
-    // State stores an array, every index cointains object which contains achievement data for one appId
+    const [gameName,setGameName] = useState('');
     const [achievementArray, setAchievementArray] = useState([]);
 
     const [loaderVisibility, setLoaderVisibility] = useState('');
@@ -32,7 +32,11 @@ const GameAchievementList = () =>{
 
     /* Socket events */
     socket.on('gameAchievementData',(data)=>{
+        // Achievement array extracted for mapping
         setAchievementArray(data.achievementdata.playerstats.achievements);
+
+        setGameName(data.achievementdata.playerstats.gameName);
+
         // Hide loader when results are ready and show result container
         setLoaderVisibility('is-hidden');
         setContentVisibility('');
@@ -44,6 +48,14 @@ const GameAchievementList = () =>{
             <Navbar />
             <Loader visibility={loaderVisibility}/>
             <div className={contentVisibility}>
+                <div className='block' />
+                <div className='tile is-parent'>
+                    <div className='tile is-child is-1'/>
+                    <div className='tile is-child'>
+                        <h3 className='title is-3'>{gameName}</h3>
+                        <div className='block' />
+                    </div>
+                </div>
                 <div className='box' box-radius='large'>
                     {achievementArray.map((achievement)=>{
                         // Define props

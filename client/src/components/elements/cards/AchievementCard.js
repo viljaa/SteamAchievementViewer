@@ -2,6 +2,7 @@ import React from 'react';
 
 // Styles
 import './AchievementCard.css';
+import '../../../App.scss';
 
 // Import components
 import AchievementIcon from '../universal/AchievementIcon';
@@ -26,7 +27,7 @@ const AchievementCard = (props) =>{
     }
 
     return(
-        <div className='box'>
+        <div className='box' id='achievementCard'>
                 <div className='tile is-parent'>
                     <div className='tile is-2 is-child'>
                         <div className='tile is-vertical is-parent'>

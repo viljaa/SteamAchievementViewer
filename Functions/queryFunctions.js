@@ -256,7 +256,7 @@ module.exports = {
 
             // Merge data from schema to userAchievements object
             userAchievements.achievementdata.playerstats.achievements.forEach((achievement)=>{
-                // Get corresponding stat from schema with achievement apiname
+                // Get corresponding achievement from schema with achievement apiname
                 const schemaData = schema.achievementSchema.game.availableGameStats.achievements.find(({name})=> name === achievement.apiname);
                 // Delete apiname from data to avoid multiple instances of same data in the object
                 delete schemaData.name;
