@@ -6,6 +6,7 @@
  - React
  - Bulma
  - Socket.io client
+ - Chart.js
  
  ### Back-end:
  - Node.js/Express.js
