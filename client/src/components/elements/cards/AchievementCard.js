@@ -26,6 +26,29 @@ const AchievementCard = (props) =>{
 
     }
 
+    // Function that determines the rarity class of achievement by the rarity percentage
+    function defineRarityClass(rarity){
+        let rarityClass;
+        switch(true){
+            case (rarity <= 5):
+                rarityClass='ULTRA RARE'
+                break;
+            case (rarity <=10):
+                rarityClass='VERY RARE'
+                break;
+            case (rarity <=20):
+                rarityClass='RARE'
+                break;
+            case (rarity <=50):
+                rarityClass='UNCOMMON'
+                break;
+            case (rarity <=100):
+                rarityClass='COMMON'
+                break;
+        }
+        return rarityClass;
+    }
+
     return(
         <div className='box' id='achievementCard'>
                 <div className='tile is-parent'>
@@ -48,7 +71,14 @@ const AchievementCard = (props) =>{
                             </div>
                         </div>
                     </div>
-                    <div className='tile is-3 is-child'/>
+                    <div className='tile is-1 is-child'/>
+                    <div className='tile is-2 is-child'>
+                        <div className='tile is-vertical is-parent'>
+                            <div className='tile is-child'>
+                                <h4 className='title is-7'>{defineRarityClass(props.data.rarity)}<br/>{props.data.rarity}%</h4>
+                            </div>
+                        </div>
+                    </div>
                     <div className='tile is-2 is-child'>
                         <div className='tile is-vertical is-parent'>
                             <div className='tile is-child'>

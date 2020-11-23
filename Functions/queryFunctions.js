@@ -74,6 +74,7 @@ function pushUserAchievements(achievementList,steamID, socket){
                 achievementdata:app.response.data,
                 progress:{
                     achievedCount:countAchieved(app.response.data.playerstats.achievements),
+                    totalCount:app.response.data.playerstats.achievements.length,
                     percentage: countProgress(app.response.data.playerstats.achievements),
                     isCompleted: isCompleted(app.response.data.playerstats.achievements)
                 }
@@ -150,8 +151,8 @@ module.exports = {
 
     /* Funciton for getting a single schema for a game from the database */
     getSchemaDB: async function getSchemaDB(appId){
-        const schema = await gameSchemaModel.find({'app':appId}).exec();
-        return schema;
+        const schema = await gameSchemaModel.findOne({'app':appId}).exec();
+        return schema.toObject();
     },
 
     /* Function for updating user achievements to DB. */
@@ -238,32 +239,32 @@ module.exports = {
     /* Function for getting user achievements for a single game from the database.*/
     getAchievementListDB: async function getAchievementListDB(steamId,appId){
         try{
-            const gameAchievements = await userAchievementModel.find({'steamID':steamId,'appID':appId}).exec();
-            return gameAchievements;
+            const gameAchievements = await userAchievementModel.findOne({'steamID':steamId,'appID':appId}).exec();
+            return gameAchievements.toObject();
         } catch (err){
             console.log(err);
         }
     },
 
+    /* Function which sorts the result object for client */
     sortAchievementObject: async function sortAchievementObject(steamId,appId){
         try{
             // Get schema and achievement object and store them into varibales
             let schema = await this.getSchemaDB(appId);
             let userAchievements = await this.getAchievementListDB(steamId,appId);
 
-            schema = schema[0].toObject();
-            userAchievements = userAchievements[0].toObject();
+            let rarityData = await axios.get(`http://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/?gameid=${appId}&format=json`); 
 
             // Merge data from schema to userAchievements object
             userAchievements.achievementdata.playerstats.achievements.forEach((achievement)=>{
-                // Get corresponding achievement from schema with achievement apiname
-                const schemaData = schema.achievementSchema.game.availableGameStats.achievements.find(({name})=> name === achievement.apiname);
-                // Delete apiname from data to avoid multiple instances of same data in the object
+                // Push corresponding schema data to achievement object
+                let schemaData = schema.achievementSchema.game.availableGameStats.achievements.find(({name})=> name === achievement.apiname);
                 delete schemaData.name;
-                // Add the schema data to main achievement object
                 achievement['schemaData'] = schemaData;
+                // Push achievement rarity percentage to achievement object
+                const rarityPercentage = rarityData.data.achievementpercentages.achievements.find(({name})=> name ===achievement.apiname);
+                achievement['rarity'] = rarityPercentage.percent.toFixed(1);
             })
-
             return userAchievements;
         } catch(err){
             console.log(err);

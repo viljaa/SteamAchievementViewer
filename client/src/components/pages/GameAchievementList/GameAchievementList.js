@@ -1,20 +1,24 @@
 import React, {useState, useEffect} from 'react';
-import socket from '../../socket/Socket';
+import socket from '../../../socket/Socket';
 
 /* Import styles */
-import '../../App.scss';
+import '../../../App.scss';
 
 /* Import components */
-import Navbar from '../elements/universal/Navbar';
-import Loader from '../elements/universal/Loader';
-import AchievementCard from '../elements/cards/AchievementCard';
+import Navbar from '../../elements/universal/Navbar';
+import Loader from '../../elements/universal/Loader';
+import PieChart from '../../elements/charts/PieChart';
+import AchievementCard from '../../elements/cards/AchievementCard';
+import GameLineChart from './components/GameLineChart';
 
 const GameAchievementList = () =>{
 
     /* States */
     const [gameName,setGameName] = useState('');
     const [achievementArray, setAchievementArray] = useState([]);
+    const [progressData, setProgressData] = useState(null)
 
+    // Visibility states
     const [loaderVisibility, setLoaderVisibility] = useState('');
     const [contentVisibility, setContentVisibility] = useState('is-hidden');
 
@@ -36,6 +40,7 @@ const GameAchievementList = () =>{
         setAchievementArray(data.achievementdata.playerstats.achievements);
 
         setGameName(data.achievementdata.playerstats.gameName);
+        setProgressData(data.progress);
 
         // Hide loader when results are ready and show result container
         setLoaderVisibility('is-hidden');
@@ -56,6 +61,16 @@ const GameAchievementList = () =>{
                         <div className='block' />
                     </div>
                 </div>
+                {contentVisibility === '' &&
+                    <div className='tile is-parent'>
+                        <div className='tile is-child is-5'>
+                            <PieChart data={progressData}/>
+                        </div>
+                        <div className='tile is-child is-7'>
+                            <GameLineChart data={achievementArray} />
+                        </div>
+                    </div> 
+                }
                 <div className='box' box-radius='large'>
                     {achievementArray.map((achievement)=>{
                         // Define props
@@ -66,7 +81,8 @@ const GameAchievementList = () =>{
                             achieved:achievement.achieved,
                             unlocktime:achievement.unlocktime,
                             icon:achievement.schemaData.icon,
-                            icongray: achievement.schemaData.icongray
+                            icongray: achievement.schemaData.icongray,
+                            rarity: achievement.rarity
                         }
 
                         return(

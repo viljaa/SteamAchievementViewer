@@ -5,7 +5,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Homepage from './components/pages/Homepage/Homepage';
 import Features from './components/pages/Features';
 import UserAchievements from './components/pages/UserAchievements/UserAchievements';
-import GameAchievementList from './components/pages/GameAchievementList';
+import GameAchievementList from './components/pages/GameAchievementList/GameAchievementList';
 
 /* App route configuration */
 const App = () =>{
