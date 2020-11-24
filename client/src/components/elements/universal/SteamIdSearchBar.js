@@ -4,7 +4,7 @@ import socket from '../../../socket/Socket.js'
 
 //Styles
 import '../../../App.scss';
-import './SteamIdSearch.css';
+import './SteamIdSearchBar.css';
 
 const SteamIdSearchBar = (props) =>{
 
@@ -60,7 +60,7 @@ const SteamIdSearchBar = (props) =>{
             </div>
             <div className='tile is-parent'>
                 <div className='tile is-child is-9'>
-                    <input className="input" type="text" placeholder="SteamID" onChange={
+                    <input id='searchbar-input' className="input mb-half-rem" type="text" placeholder="SteamID" onChange={
                         (event) => setSteamId(event.target.value)
                     }/>
                     {!isValid &&

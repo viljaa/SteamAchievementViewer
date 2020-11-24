@@ -51,20 +51,49 @@ const HomeContainer = () =>{
                 <div className='tile is-ancestor'>
                     <div className='tile is-parent'>
                         <div className='tile is-child is-6'>
-                            <p className='title is-3'>How it works:</p>
-                            <p className='defaultText'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc dui porta orci, quis semper odio felis ut quam. Suspendisse varius ligula in molestie lacinia. Maecenas varius eget ligula a sagittis. Pellentesque interdum, nisl nec interdum maximus, augue diam porttitor lorem, et sollicitudin felis neque sit amet erat. Maecenas imperdiet felis nisi, fringilla luctus felis hendrerit sit amet. Aenean vitae gravida diam, finibus dignissim turpis. Sed eget varius ligula, at volutpat tortor.</p>
+                            <div className='content'>
+                                <p className='title is-3'>How to start using Arch:</p>
+                                <p>Arch Steam Achievement Viewer utilizes Steam Web API to fetch your public achievement data into our own database.
+                                To start tracking your personal Steam achievements with Arch, you need:</p>
+                                <div className='ul has-text-weight-bold'>
+                                    <li>SteamID64 (e.g. 76561198082257196)</li> 
+                                    <li>Steam profile set as public</li>
+                                </div>
+                                <div className='block' />
+                                <p>You can get your SteamId from the public URL of your Steam profile or by using <a href='https://steamidfinder.com/'target="_blank">SteamID Finder</a>.</p>
+                                <p className='title is-5 mt-2'>Update or View?</p>
+                                <p>Arch saves your personal achievement data and compiles it as a single viewable collection. Update option updates user's achievement data to the DB and
+                                    shows the collection after the update is complete. View option just shows the last updated collection. First time users need to perform one Update before they're able
+                                    to use View.
+                                </p>
+                            </div>
+                            <Link className='button is-dark' to={'/features'}>Read more</Link>
                         </div>
                         <div className='tile is-child is-1' />
-                        <div className='tile is-child is-5'>
-                            <p className='title is-3'>About the project</p>
-                            <div className='buttons'>
-                                <Link className='button is-dark' to={'/features'}>Features</Link>
-                                <a className='button is-dark' href='https://github.com/viljaa/SteamAchievementViewer'>
-                                    <span className="icon is-medium">
-                                        <i className="fab fa-github"></i>
-                                    </span>
-                                    <span>Project</span>
-                                </a>
+                        <div className='tile is-parent is-vertical is-5'>
+                            <div className='section'>
+                                <div className='tile is-child'>
+                                    <p className='title is-3'>About the project</p>
+                                    <div className='buttons'>
+                                        <Link className='button is-dark' to={'/features'}>Features</Link>
+                                        <a className='button is-dark' href='https://github.com/viljaa/SteamAchievementViewer'>
+                                            <span className="icon is-medium">
+                                                <i className="fab fa-github"></i>
+                                            </span>
+                                            <span>Project</span>
+                                        </a>
+                                    </div>
+                                    <p className='subtitle'>Problems using Arch?</p>
+                                    <div className='buttons'>
+                                        <Link className='button is-dark' to={''}>FAQ</Link>
+                                        <a className='button is-dark' href='https://github.com/viljaa/SteamAchievementViewer/issues'>
+                                            <span className="icon is-medium">
+                                                <i className="fas fa-bug"></i>
+                                            </span>
+                                            <span>Report issues</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

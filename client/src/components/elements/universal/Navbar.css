@@ -1,0 +1,23 @@
+@media screen and (max-width:1040px){
+    #navbarBasic.navbar-menu{
+        display: block;
+        opacity: 0;
+    
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: -1;
+    
+        transform: translateY(-100%);
+        transition: none;
+        pointer-events: none;
+    }
+    
+    #navbarBasic.navbar-menu.is-active {
+        opacity: 1;
+        transform: none;
+        transition: all .4s ease-in-out;
+        pointer-events: auto;
+    }
+
+}
