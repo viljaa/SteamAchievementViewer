@@ -3,13 +3,15 @@ import socket from '../../../socket/Socket';
 
 /* Import styles */
 import '../../../App.scss';
+import './GameAchievementList.css'
 
 /* Import components */
 import Navbar from '../../elements/universal/Navbar';
 import Loader from '../../elements/universal/Loader';
 import PieChart from '../../elements/charts/PieChart';
-import AchievementCard from '../../elements/cards/AchievementCard';
 import GameLineChart from './components/GameLineChart';
+import RarityDataLevel from './components/RarityDataLevel';
+import AchievementCard from '../../elements/cards/AchievementCard';
 
 const GameAchievementList = () =>{
 
@@ -30,7 +32,7 @@ const GameAchievementList = () =>{
 
         socket.emit('getGameAchievements', {
             steamId:steamId,
-            appId:appId  // Always triggers view event to prevent spamming update queries to API
+            appId:appId
         });
     },[])
 
@@ -62,14 +64,31 @@ const GameAchievementList = () =>{
                     </div>
                 </div>
                 {contentVisibility === '' &&
-                    <div className='tile is-parent'>
-                        <div className='tile is-child is-5'>
-                            <PieChart data={progressData}/>
+                    <div>
+                        <div className='tile is-parent'>
+                            <div className='tile is-vertical is-5'>
+                                <div className='tile is-child'>
+                                    <PieChart data={progressData}/>
+                                </div>
+                                <div className='tile is-child'>
+                                <RarityDataLevel data={achievementArray}/>
+                                </div>
+                            </div>
+                            <div className='tile is-child is-7'>
+                                <GameLineChart data={achievementArray} />
+                            </div>
                         </div>
-                        <div className='tile is-child is-7'>
-                            <GameLineChart data={achievementArray} />
+                        <div className='block' />
+                        <div class="progress-wrapper">
+                            <progress className='progress is-large mt-1 mb-1' value={progressData.percentage} max='100'></progress>
+                            {progressData.percentage >= 50 &&
+                                <p class="progress-value has-text-white">{progressData.percentage}%</p>
+                            }
+                            {progressData.percentage < 50 &&
+                                <p class="progress-value">{progressData.percentage}%</p>
+                            }
                         </div>
-                    </div> 
+                    </div>
                 }
                 <div className='box' box-radius='large'>
                     {achievementArray.map((achievement)=>{

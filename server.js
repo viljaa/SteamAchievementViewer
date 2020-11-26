@@ -68,7 +68,6 @@ io.on('connection', (socket)=>{
 
     // Socket event for getting achievement data of a single game
     socket.on('getGameAchievements',(data)=>{
-
         dbQuery.sortAchievementObject(data.steamId,data.appId).then((res)=>{
             socket.emit('gameAchievementData', res);
         });
