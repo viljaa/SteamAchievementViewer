@@ -60,7 +60,7 @@ const SteamIdSearchBar = (props) =>{
             </div>
             <div className='tile is-parent'>
                 <div className='tile is-child is-9'>
-                    <input id='searchbar-input' className="input mb-half-rem" type="text" placeholder="SteamID" onChange={
+                    <input className="input mb-half-rem" type="text" placeholder="SteamID --- e.g. 76561198082257196" onChange={
                         (event) => setSteamId(event.target.value)
                     }/>
                     {!isValid &&

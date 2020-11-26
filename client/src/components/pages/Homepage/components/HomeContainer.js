@@ -8,6 +8,7 @@ import './HomeContainer.css';
 // Import components
 import SteamIdSearchBar from '../../../elements/universal/SteamIdSearchBar.js'
 import TextOverlay from './TextOverlay.js';
+import InfoContainer from './InfoContainer.js';
 
 const HomeContainer = () =>{
     return(
@@ -51,23 +52,7 @@ const HomeContainer = () =>{
                 <div className='tile is-ancestor'>
                     <div className='tile is-parent'>
                         <div className='tile is-child is-6'>
-                            <div className='content'>
-                                <p className='title is-3'>How to start using Arch:</p>
-                                <p>Arch Steam Achievement Viewer utilizes Steam Web API to fetch your public achievement data into our own database.
-                                To start tracking your personal Steam achievements with Arch, you need:</p>
-                                <div className='ul has-text-weight-bold'>
-                                    <li>SteamID64 (e.g. 76561198082257196)</li> 
-                                    <li>Steam profile set as public</li>
-                                </div>
-                                <div className='block' />
-                                <p>You can get your SteamId from the public URL of your Steam profile or by using <a href='https://steamidfinder.com/'target="_blank">SteamID Finder</a>.</p>
-                                <p className='title is-5 mt-2'>Update or View?</p>
-                                <p>Arch saves your personal achievement data and compiles it as a single viewable collection. Update option updates user's achievement data to the DB and
-                                    shows the collection after the update is complete. View option just shows the last updated collection. First time users need to perform one Update before they're able
-                                    to use View.
-                                </p>
-                            </div>
-                            <Link className='button is-dark' to={'/features'}>Read more</Link>
+                            <InfoContainer/>
                         </div>
                         <div className='tile is-child is-1' />
                         <div className='tile is-parent is-vertical is-5'>

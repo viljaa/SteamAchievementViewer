@@ -22,7 +22,7 @@ const userAchievementModel = require('../dbModels/userAchievements');
 /* FUNCTIONS */
 
 /* Function for getting schemas from the API. Gets only the schemas that don't already exist in the database.*/
-function insertSchemas(idArray, apiKey){
+async function insertSchemas(idArray, apiKey){
     // Wait until connection is established
     if(mongoose.connection.readyState == 1){
         idArray.map((id)=>{
@@ -57,7 +57,7 @@ function insertSchemas(idArray, apiKey){
 }
 
 /* Function for saving updated user achievement stats to database */
-function pushUserAchievements(achievementList,steamID, socket){
+async function pushUserAchievements(achievementList,steamID, socket, socketEvent){
     console.log('PUSH STARTED. CONNETION STATE:' + mongoose.connection.readyState);
     // Check connection
     if(mongoose.connection.readyState == 1){
@@ -89,7 +89,9 @@ function pushUserAchievements(achievementList,steamID, socket){
             });
         });
 
-        socket.emit('updateDone'); // Injform client when update is finished
+        if(socket){
+            socket.emit(socketEvent); // Inform client when update is finished
+        }
     }
     else{
         console.log('No database connection.')
@@ -156,7 +158,7 @@ module.exports = {
     },
 
     /* Function for updating user achievements to DB. */
-    updateUserAchievements: async function updateUserAchievements(steamId, apiKey, appIDs, socket){  // appIDs is an array that configures the amount of updated games
+    updateUserAchievements: async function updateUserAchievements(steamId, apiKey, appIDs, socket, socketEvent){  // appIDs is an array that configures the amount of updated games
 
         const getGameAchievements = async (steamId, appId, apiKey)=>{
             try{
@@ -188,8 +190,15 @@ module.exports = {
                 console.log(app.appId + '--' + app.response.data.playerstats.gameName);
             })
 
-            pushUserAchievements(filteredArray, steamId, socket);
+            pushUserAchievements(filteredArray, steamId, socket, socketEvent);
         })
+    },
+
+    /* Function for updating achievements and schema of a single game, appId must be inside an array*/
+    updateOneGame: function updateOneGame(steamId,appId, apiKey, socket,socketEvent){
+        insertSchemas(appId,apiKey).then(()=>{
+            this.updateUserAchievements(steamId, apiKey, appId, socket, socketEvent)
+        });
     },
 
     /* Function for getting all appId's related to a singe steamId from the database*/

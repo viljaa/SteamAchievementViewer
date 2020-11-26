@@ -10,7 +10,6 @@ const dbQuery = require('./functions/queryFunctions.js');
 
 /* Environment variables */
 const apiKey = process.env.API_KEY;
-const steamID = process.env.STEAM_ID; // Only for dev purposes, will be deleted later before deployment
 
 /* App setup */
 const app = express();
@@ -42,7 +41,7 @@ io.on('connection', (socket)=>{
             // Update schemas and user achievements
             dbQuery.updateSchemas(data.steamId, apiKey, socket).then(()=>{
                 dbQuery.getUserAppIdsAPI(data.steamId, apiKey).then((res)=>{  // Get IdArray needed for updateUserAchievement function.
-                    dbQuery.updateUserAchievements(data.steamId, apiKey, res, socket) // Use IdArray from result to update user achievements.
+                    dbQuery.updateUserAchievements(data.steamId, apiKey, res, socket, 'updateDone') // Use IdArray from result to update user achievements.
                 })
             })
         }
@@ -55,11 +54,17 @@ io.on('connection', (socket)=>{
         }
     })
 
-    // UNFINISHED - socket event for manual update for a single game
+    // Socket event for manual update for a single game
     socket.on('updateOneGame', (data)=>{
-        console.log(data.steamId);
-        console.log(data.appId);
+        dbQuery.updateOneGame(data.steamId, data.appId, apiKey, socket, 'oneGameUpdated')
     })
+
+    // Socket event for refreshing data of data level after manual update
+    socket.on('refreshUserAchievements', (data)=>{
+        dbQuery.getUserAchievementsDB(data.steamId).then((res)=>{
+            socket.emit('updateDataLevel',res);
+        })
+    });
 
     // Socket event for getting achievement data of a single game
     socket.on('getGameAchievements',(data)=>{
@@ -70,21 +75,3 @@ io.on('connection', (socket)=>{
     })
     
 });
-
-// Testing queries, temporary, will be deleted later
-
-
-/*dbQuery.getUserAppIdsAPI(data.steamId, apiKey).then((res)=>{
-    console.log('ID ARRAY ---- '+res);
-})*/
-
-/*dbQuery.getUserAppIdsDB(steamID).then((res)=>{
-    // Here is where you utilize the result
-});*/
-
-//dbQuery.updateSchemas(steamID,apiKey);
-
-/*let idArray = ['35140','8980','523489','4000','2990','6220','6910','6920','2270',
-'12120','12250','12140','12150','12750','12360','13600','17460','22320','32370','20900','32430',
-'33230','33910','33930','219540','8930'];
-dbQuery.updateUserAchievements(steamID,apiKey,idArray);*/

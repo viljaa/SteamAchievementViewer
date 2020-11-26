@@ -10,29 +10,35 @@ const GameInfoCard = (props) =>{
     /* Variables */
     const cardImg_url = `https://steamcdn-a.akamaihd.net/steam/apps/${props.data.appId}/capsule_184x69.jpg`
     const totalAchievements = props.data.achievements.total;
+    const achievements = props.data.achievements.achieved;
+    const progress = props.data.progress;
 
     // Get steamId from url
     const url = new URL(window.location.href);
     const steamId = url.searchParams.get('steamId');
 
     /* States */
-    const [progress, setProgress] = useState(props.data.progress);
-    const [achievements, setAchievements] = useState(props.data.achievements.achieved);
+    const [buttonClass, setButtonClass] = useState('button is-dark');
 
     /* Functions */
     function updateOneGame(appId, steamId){
-
-        console.log(steamId + '---' + appId);
-
+        setButtonClass('button is-dark is-loading');
         socket.emit('updateOneGame',{
             steamId: steamId,
-            appId: appId
+            appId: [appId]
         })
     }
-
     function getGameAchievemets(appId, steamId){
         socket.emit('getGameAchievements',{appId,steamId});
     }
+
+    /* Socket events */
+    socket.off('oneGameUpdated').on('oneGameUpdated',()=>{
+        setTimeout(()=>{
+            setButtonClass('button is-dark');
+            socket.emit('refreshUserAchievements',{steamId:steamId});
+        },1000)
+    })
 
     return(
         <div className='box' box-radius='large'>
@@ -71,7 +77,7 @@ const GameInfoCard = (props) =>{
                 <div className='tile is-child is-1'>
                     <div className='tile is-vertical is-parent'>
                         <div className='tile is-child'>
-                            <button className='button is-dark' onClick={()=>updateOneGame(props.data.appId, steamId)}>Update</button>
+                            <button className={buttonClass} onClick={()=>updateOneGame(props.data.appId, steamId)}>Update</button>
                         </div>
                     </div>
                 </div>

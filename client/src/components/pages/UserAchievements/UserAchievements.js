@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import socket from '../../../socket/Socket';
 
 /* Import styles */
 import '../../../App.scss';
@@ -8,7 +9,6 @@ import Navbar from '../../elements/universal/Navbar';
 import Loader from '../../elements/universal/Loader';
 import DataLevel from '../UserAchievements/components/DataLevel';
 import GameInfoCard from '../../elements/cards/GameInfoCard';
-import socket from '../../../socket/Socket';
 
 const UserAchievements = () =>{
 
@@ -19,7 +19,6 @@ const UserAchievements = () =>{
     const [loaderVisibility, setLoaderVisibility] = useState('');
     const [contentVisibility, setContentVisibility] = useState('is-hidden');
 
-    // useEffect hook that ensures achievement data will be available every time component is re-rendered
     useEffect(()=>{
         let url = new URL(window.location.href);
         let id = url.searchParams.get('steamId');
@@ -36,6 +35,10 @@ const UserAchievements = () =>{
         // Hide loader when results arrive, render content visible
         setLoaderVisibility('is-hidden');
         setContentVisibility('');
+    })
+
+    socket.off('updateDataLevel').on('updateDataLevel',(data)=>{
+        setResultArray([...data]);
     })
 
     return(
