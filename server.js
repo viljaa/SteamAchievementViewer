@@ -54,6 +54,13 @@ io.on('connection', (socket)=>{
         }
     })
 
+    // Socket event for getting user profile data from API
+    socket.on('getUserProfile',(data)=>{
+        dbQuery.getUserProfileAPI(data.steamId,apiKey).then((res)=>{
+            socket.emit('userProfileData', res);
+        })
+    })
+
     // Socket event for manual update for a single game
     socket.on('updateOneGame', (data)=>{
         dbQuery.updateOneGame(data.steamId, data.appId, apiKey, socket, 'oneGameUpdated')
@@ -71,6 +78,11 @@ io.on('connection', (socket)=>{
         dbQuery.sortAchievementObject(data.steamId,data.appId).then((res)=>{
             socket.emit('gameAchievementData', res);
         });
+    })
+
+    // Disconnecting
+    socket.on('disconnect', ()=>{
+        console.log('Disconnected client: '+socket.id)
     })
     
 });

@@ -24,6 +24,14 @@ const GameLineChart = (props) =>{
         },
         options: {
             responsive:true,
+            scales:{
+                yAxes:[{
+                    scaleLabel:{
+                        display:true,
+                        labelString: 'Total achievements'
+                    }
+                }]
+            }
         }
 
     })

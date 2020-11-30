@@ -84,7 +84,7 @@ const AchievementCard = (props) =>{
                             <div className='tile is-child'>
                                 {props.data.achieved===1 &&
                                     <div>
-                                        <h4 className='title is-6'>{time.month} {time.day}. {time.year}</h4>
+                                        <h4 className='title is-6'>{time.day} {time.month} {time.year}</h4>
                                         <h4 className='title is-6'>{time.time}</h4>
                                     </div>
                                 }

@@ -201,6 +201,16 @@ module.exports = {
         });
     },
 
+    /* Function for getting user profile data from the API */
+    getUserProfileAPI: async function getUserProfileAPI(steamId, apiKey){
+        try{
+            const profileData = await axios.get(`http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamId}&format=json`);
+            return profileData.data.response.players[0];
+        } catch(err){
+            console.log(err)
+        }
+    },
+
     /* Function for getting all appId's related to a singe steamId from the database*/
     getUserAppIdsDB: async function getUserAppIds(steamId){
         // Get Id's from the database
