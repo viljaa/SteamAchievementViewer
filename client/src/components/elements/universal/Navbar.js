@@ -34,11 +34,10 @@ const Navbar = () =>{
                     <div className="navbar-item has-dropdown is-hoverable">
                         <a className="navbar-link">More</a>
                         <div className="navbar-dropdown">
-                            <a className="navbar-item">About</a>
-                            <a className="navbar-item">Project</a>
-                            <a className="navbar-item">Contact</a>
+                            <a className="navbar-item">FAQ</a>
                             <hr className="navbar-divider"/>
-                            <a className="navbar-item">Report an issue</a>
+                            <a className="navbar-item" href='https://github.com/viljaa/SteamAchievementViewer'>Project</a>
+                            <a className="navbar-item" href='https://github.com/viljaa/SteamAchievementViewer/issues'>Report an issue</a>
                         </div>
                     </div>
                 </div>

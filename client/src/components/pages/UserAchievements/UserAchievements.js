@@ -15,7 +15,9 @@ const UserAchievements = () =>{
     /* States */
     // State stores an array, every index cointains object which contains achievement data for one appId
     const [resultArray, setResultArray] = useState([]);
+
     const [userProfileData, setUserProfileData] = useState([]);
+    const [progressArray, setProgressArray] = useState([]);
     
     const [loaderVisibility, setLoaderVisibility] = useState('');
     const [contentVisibility, setContentVisibility] = useState('is-hidden');
@@ -46,12 +48,18 @@ const UserAchievements = () =>{
         setResultArray([...data]);
     })
 
+    function createProgressArray(resultArray){
+        return resultArray.map((app)=>app.progress.percentage);
+    }
+
     return(
         <div className='container is-max-widescreen'>
             <Navbar />
             <Loader visibility={loaderVisibility}/>
             <div className={contentVisibility}>
-                <ProfileData data={userProfileData} />
+                {contentVisibility === '' &&
+                    <ProfileData profiledata={userProfileData} progressArray={createProgressArray(resultArray)}/>
+                }
                 <DataLevel data={{array:resultArray}} />
                 <div className='box' box-radius='large'>
                     {resultArray.map((app)=>{

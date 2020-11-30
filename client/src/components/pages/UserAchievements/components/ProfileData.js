@@ -3,8 +3,15 @@ import React from 'react';
 //Styles
 import '../../../../App.scss'
 
-const ProfileData = (props) =>{
+//Components
+import DoughnutChart from './DoughnutChart';
 
+const ProfileData = (props) =>{
+    
+    /* Variables */
+    const progressArray = props.progressArray;
+
+    /* Functions */
     const formatDate = (unixStamp) =>{
         const date = new Date(unixStamp*1000)
         const formattedDate = (`${date.getMonth()+1}-${date.getDate()}-${date.getFullYear()}`);  //data.getMonth() returns value between 0-11, so plus 1 to get numeric date correctly
@@ -16,22 +23,27 @@ const ProfileData = (props) =>{
             <div className='tile is-parent'>
                 <div className='tile is-child is-1'/>
                 <div className='tile is-child'>
-                    <h3 className='title is-3'>{props.data.personaname}'s achievements</h3>
+                    <h3 className='title is-3'>{props.profiledata.personaname}'s achievements</h3>
                     <div className='block' />
                 </div>
             </div>
             <div className='tile is-parent'>
                 <div className='tile is-child is-1'/>
-                <div className='tile is-child is-2'>
-                    <div className='image is-128x128' src>
-                        <img className='is-rounded' src={props.data.avatarfull}/>
-                    </div>
-                </div>
                 <div className='tile is-child is-6'>
+                    <div className='image is-128x128' src>
+                        <img className='is-rounded' src={props.profiledata.avatarfull}/>
+                    </div>
                     <div className='block' />
-                    <p className='heading'><b>Steam ID: </b>{props.data.steamid}</p>
-                    <p className='heading'><b>Profile URL: </b><a href={props.data.profileurl}>{props.data.profileurl}</a></p>
-                    <p className='heading'><b>Joined Steam: </b>{formatDate(props.data.timecreated)}</p>
+                    <p className='heading'><b>Steam ID: </b>{props.profiledata.steamid}</p>
+                    <p className='heading'><b>Profile URL: </b><a href={props.profiledata.profileurl}>{props.profiledata.profileurl}</a></p>
+                    <p className='heading'><b>Joined Steam: </b>{formatDate(props.profiledata.timecreated)}</p>
+                    <div className='block' />
+                    <div className='block' />
+                </div>
+                <div className='tile is-child is-4 has-text-centered'>
+                    <h4 className='title is-6'>Game completion percentages by groups</h4>
+                    <div className='block' />
+                    <DoughnutChart data={progressArray} />
                 </div>
             </div>
         </div>

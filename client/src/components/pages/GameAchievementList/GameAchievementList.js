@@ -8,7 +8,7 @@ import './GameAchievementList.css'
 /* Import components */
 import Navbar from '../../elements/universal/Navbar';
 import Loader from '../../elements/universal/Loader';
-import PieChart from '../../elements/charts/PieChart';
+import PieChart from './components/PieChart';
 import GameLineChart from './components/GameLineChart';
 import RarityDataLevel from './components/RarityDataLevel';
 import AchievementCard from '../../elements/cards/AchievementCard';
