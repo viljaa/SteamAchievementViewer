@@ -70,7 +70,11 @@ const GameInfoCard = (props) =>{
                             <progress className='progress' value={progress} max='100'>{progress}%</progress>
                         </div>
                         <div className='tile is-child'>
-                            <p>Achievements: {achievements}/{totalAchievements}</p>
+                            <p>Achievements: {achievements}/{totalAchievements}
+                            {progress === 100 &&
+                                <i className='fas fa-award ml-1'></i>
+                            }
+                            </p>
                         </div>
                     </div>
                 </div>

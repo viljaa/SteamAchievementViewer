@@ -62,7 +62,7 @@ const GameLineChart = (props) =>{
         // Convert unix stamps to date string array. Index example: YYYY-MM-DD
         const dateArray = unixArray.map((unix)=> {
             const date = new Date(unix*1000)
-            const converted = date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate();
+            const converted = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
             return converted;
         });
         // Count amounts for each date

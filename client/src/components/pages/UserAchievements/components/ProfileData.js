@@ -1,7 +1,7 @@
 import React from 'react';
 
 //Styles
-import '../../../../App.scss'
+import '../../../../App.scss';
 
 //Components
 import DoughnutChart from './DoughnutChart';
@@ -41,7 +41,7 @@ const ProfileData = (props) =>{
                     <div className='block' />
                 </div>
                 <div className='tile is-child is-4 has-text-centered'>
-                    <h4 className='title is-6'>Game completion percentages by groups</h4>
+                    <h4 className='title is-6'>Games by completion percentages</h4>
                     <div className='block' />
                     <DoughnutChart data={progressArray} />
                 </div>

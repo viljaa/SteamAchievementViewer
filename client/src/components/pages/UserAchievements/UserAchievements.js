@@ -8,7 +8,8 @@ import '../../../App.scss';
 import Navbar from '../../elements/universal/Navbar';
 import Loader from '../../elements/universal/Loader';
 import ProfileData from './components/ProfileData';
-import DataLevel from '../UserAchievements/components/DataLevel';
+import DataLevel from './components/DataLevel';
+import GameSortBar from './components/GameSortBar';
 import GameInfoCard from '../../elements/cards/GameInfoCard';
 
 const UserAchievements = () =>{
@@ -48,6 +49,7 @@ const UserAchievements = () =>{
         setResultArray([...data]);
     })
 
+    /* Functions */
     function createProgressArray(resultArray){
         return resultArray.map((app)=>app.progress.percentage);
     }
@@ -61,6 +63,8 @@ const UserAchievements = () =>{
                     <ProfileData profiledata={userProfileData} progressArray={createProgressArray(resultArray)}/>
                 }
                 <DataLevel data={{array:resultArray}} />
+                <hr className='hr'/>
+                <GameSortBar setter={setResultArray} data={resultArray}/>
                 <div className='box' box-radius='large'>
                     {resultArray.map((app)=>{
                             // Define propsObj

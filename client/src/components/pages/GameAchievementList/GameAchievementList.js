@@ -11,6 +11,7 @@ import Loader from '../../elements/universal/Loader';
 import PieChart from './components/PieChart';
 import GameLineChart from './components/GameLineChart';
 import RarityDataLevel from './components/RarityDataLevel';
+import AchievementSortBar from './components/AchievementSortBar';
 import AchievementCard from '../../elements/cards/AchievementCard';
 
 const GameAchievementList = () =>{
@@ -79,15 +80,17 @@ const GameAchievementList = () =>{
                             </div>
                         </div>
                         <div className='block' />
-                        <div class="progress-wrapper">
+                        <div className="progress-wrapper">
                             <progress className='progress is-large mt-1 mb-1' value={progressData.percentage} max='100'></progress>
                             {progressData.percentage >= 50 &&
-                                <p class="progress-value has-text-white">{progressData.percentage}%</p>
+                                <p className="progress-value has-text-white">{progressData.percentage}%</p>
                             }
                             {progressData.percentage < 50 &&
-                                <p class="progress-value">{progressData.percentage}%</p>
+                                <p className="progress-value">{progressData.percentage}%</p>
                             }
                         </div>
+                        <hr className='hr'/>
+                        <AchievementSortBar setter={setAchievementArray} data={achievementArray} />
                     </div>
                 }
                 <div className='box' box-radius='large'>
