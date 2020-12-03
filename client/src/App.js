@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 /* Import page components */
 import Homepage from './components/pages/Homepage/Homepage';
-import Features from './components/pages/Features';
+import Features from './components/pages/Features/Features';
 import UserAchievements from './components/pages/UserAchievements/UserAchievements';
 import GameAchievementList from './components/pages/GameAchievementList/GameAchievementList';
 

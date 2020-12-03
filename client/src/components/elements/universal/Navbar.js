@@ -29,7 +29,7 @@ const Navbar = () =>{
             </div>
             <div id="navbarBasic" className={isOpen ? 'navbar-menu is-active':'navbar-menu'}>
                 <div className="navbar-start">
-                    <Link className='navbar-item' to={'/'}>Home</Link>
+                    <Link className='navbar-item' to={'/'}><i class="fas fa-home mr-1"/>Home</Link>
                     <Link className='navbar-item' to={'/features'}>Features</Link>
                     <div className="navbar-item has-dropdown is-hoverable">
                         <a className="navbar-link">More</a>
