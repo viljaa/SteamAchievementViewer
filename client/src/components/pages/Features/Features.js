@@ -5,7 +5,7 @@ import '../../../App.scss';
 
 // Import components
 import Navbar from '../../elements/universal/Navbar';
-import TextContent from './components/TextContent';
+import ContentContainer from './components/ContentContainer';
 
 const Features = () =>{
 
@@ -22,7 +22,7 @@ const Features = () =>{
                     <p className='subtitle'>Get to know Arch's basic functionalities and how to use them</p>
                 </div>
                 <hr className='hr'/>
-                <TextContent/>
+                <ContentContainer/>
             </div>
         </div>
     )
