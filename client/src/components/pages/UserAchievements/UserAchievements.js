@@ -18,7 +18,6 @@ const UserAchievements = () =>{
     const [resultArray, setResultArray] = useState([]);
 
     const [userProfileData, setUserProfileData] = useState([]);
-    const [progressArray, setProgressArray] = useState([]);
     
     const [loaderVisibility, setLoaderVisibility] = useState('');
     const [contentVisibility, setContentVisibility] = useState('is-hidden');
@@ -77,7 +76,6 @@ const UserAchievements = () =>{
                                     achieved:app.progress.achievedCount
                                 }
                             };
-                            //Dynamically create a new GameInfoCard -component
                             return(
                             <GameInfoCard data={propsObj}/>
                             )

@@ -16,12 +16,10 @@ const HomeContainer = () =>{
             <div id='searchBoxSmallScreen'>
                 <SteamIdSearchBar/>
             </div>
-
             <div className='card'>
                 <div className='card-image'>
                     <img src='https://steamuserimages-a.akamaihd.net/ugc/960856720987058879/027108D90926F2FD3B2F2694CBD2EC5DCACEDC93/' className='is-16by9' id='searchBoxImg'/>
                 </div>
-                
                 <div className='is-overlay toned_background'>
                     <div className='card-content is-overlay' id='textOverlaySmallScreen'>
                         <TextOverlay class={'tile is-parent'}/>
@@ -30,14 +28,11 @@ const HomeContainer = () =>{
                         <TextOverlay class={'tile is-parent mt-large'}/>
                     </div>
                 </div>
-                
                 <div className='card-content is-overlay mt-larger' id='searchBoxOverlay'>
                     <SteamIdSearchBar id={'toned_box'} title={'toned_box_h4'}/>
                 </div>
             </div>
-
             <div className='block' />
-
             <div className='tile is-parent'>
                 <div className='tile is-child is-2'/>
                 <div className='tile is-child is-8 has-text-centered'>
@@ -46,8 +41,6 @@ const HomeContainer = () =>{
                 </div>
                 <div className='tile is-child is-2'/>
             </div>
-
-
             <div className='section'>
                 <div className='tile is-ancestor'>
                     <div className='tile is-parent'>

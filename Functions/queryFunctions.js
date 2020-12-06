@@ -1,5 +1,4 @@
-/* QUERY FUNCTIONS MODULE--- File contains all functions used in database and API queries */
-
+/* QUERY FUNCTIONS MODULE --- File contains all functions used in database and API queries */
 
 /* CONFIGURATION */
 
@@ -16,8 +15,6 @@ mongoose.connect(uri, {useNewUrlParser:true, useUnifiedTopology:true});
 // Import models
 const gameSchemaModel = require('../dbModels/gameModel');
 const userAchievementModel = require('../dbModels/userAchievements');
-
-
 
 /* FUNCTIONS */
 
@@ -287,7 +284,6 @@ module.exports = {
             return userAchievements;
         } catch(err){
             console.log(err);
-        }
-        
+        }        
     }
 }

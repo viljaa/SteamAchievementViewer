@@ -18,9 +18,9 @@ const Navbar = () =>{
     return(
         <div className='navbar'>
             <div className='navbar-brand'>
-                <a className='navbar-item'>
+                <Link className='navbar-item' to={'/'}>
                     <img src={logo} id='navbarBanner'/>
-                </a>
+                </Link>
                 <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic" onClick={toggle}>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
