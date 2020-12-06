@@ -29,12 +29,12 @@ const Navbar = () =>{
             </div>
             <div id="navbarBasic" className={isOpen ? 'navbar-menu is-active':'navbar-menu'}>
                 <div className="navbar-start">
-                    <Link className='navbar-item' to={'/'}><i class="fas fa-home mr-1"/>Home</Link>
+                    <Link className='navbar-item' to={'/'}><i className="fas fa-home mr-1"/>Home</Link>
                     <Link className='navbar-item' to={'/features'}>Features</Link>
                     <div className="navbar-item has-dropdown is-hoverable">
                         <a className="navbar-link">More</a>
                         <div className="navbar-dropdown">
-                            <a className="navbar-item">FAQ</a>
+                            <Link className="navbar-item" to={'/faq'}>FAQ</Link>
                             <hr className="navbar-divider"/>
                             <a className="navbar-item" href='https://github.com/viljaa/SteamAchievementViewer'>Project</a>
                             <a className="navbar-item" href='https://github.com/viljaa/SteamAchievementViewer/issues'>Report an issue</a>

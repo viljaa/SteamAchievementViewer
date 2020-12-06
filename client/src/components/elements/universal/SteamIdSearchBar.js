@@ -22,7 +22,7 @@ const SteamIdSearchBar = (props) =>{
         setUpdateFailed(false);
         setIsValid(true);
 
-        if(steamId.length < 1){
+        if(steamId.length < 1 || isNaN(steamId)){
             event.preventDefault();
             setIsValid(false);
         }
@@ -64,10 +64,10 @@ const SteamIdSearchBar = (props) =>{
                         (event) => setSteamId(event.target.value)
                     }/>
                     {!isValid &&
-                        <p className='white-text'>Invalid input!</p>
+                        <p className='alert-text'>Invalid input!</p>
                     }
                     {updateFailed &&
-                        <p className='white-text'>Unable to update. Check your SteamID and Steam-profile privacy settings!</p>
+                        <p className='alert-text'>Unable to update. Check your SteamID and Steam-profile privacy settings!</p>
                     }
                 </div>
                 <div className='tile is-child is-1'></div>

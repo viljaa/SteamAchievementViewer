@@ -48,7 +48,7 @@ const HomeContainer = () =>{
             </div>
 
 
-            <section className='section'>
+            <div className='section'>
                 <div className='tile is-ancestor'>
                     <div className='tile is-parent'>
                         <div className='tile is-child is-6'>
@@ -56,34 +56,38 @@ const HomeContainer = () =>{
                         </div>
                         <div className='tile is-child is-1' />
                         <div className='tile is-parent is-vertical is-5'>
-                            <div className='section'>
-                                <div className='tile is-child'>
-                                    <p className='title is-3'>About the project</p>
-                                    <div className='buttons'>
-                                        <Link className='button is-dark' to={'/features'}>Features</Link>
-                                        <a className='button is-dark' href='https://github.com/viljaa/SteamAchievementViewer'>
-                                            <span className="icon is-medium">
-                                                <i className="fab fa-github"></i>
-                                            </span>
-                                            <span>Project</span>
-                                        </a>
-                                    </div>
-                                    <p className='subtitle'>Problems using Arch?</p>
-                                    <div className='buttons'>
-                                        <Link className='button is-dark' to={''}>FAQ</Link>
-                                        <a className='button is-dark' href='https://github.com/viljaa/SteamAchievementViewer/issues'>
-                                            <span className="icon is-medium">
-                                                <i className="fas fa-bug"></i>
-                                            </span>
-                                            <span>Report issues</span>
-                                        </a>
-                                    </div>
+                            <div className='tile is-child'>
+                                <h3 className='title is-3'>About the project</h3>
+                                <div className='buttons'>
+                                    <Link className='button is-dark' to={'/features'}>Features</Link>
+                                    <a className='button is-dark' href='https://github.com/viljaa/SteamAchievementViewer'>
+                                        <span className="icon is-medium">
+                                            <i className="fab fa-github"></i>
+                                        </span>
+                                        <span>Project</span>
+                                    </a>
                                 </div>
+                                <p className='subtitle'>Problems using Arch?</p>
+                                <div className='buttons'>
+                                    <Link className='button is-dark' to={'/faq'}>FAQ</Link>
+                                    <a className='button is-dark' href='https://github.com/viljaa/SteamAchievementViewer/issues'>
+                                        <span className="icon is-medium">
+                                            <i className="fas fa-bug"></i>
+                                        </span>
+                                        <span>Report issues</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div className='tile is-child'>
+                                <h4 className='title is-5 mt-1'>Don't have a Steam account or just want to try out Arch?</h4>
+                                <p>
+                                    Use SteamID <strong>76561198082257196</strong> to see an example achievement collection and experience Arch's features.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     )
 };

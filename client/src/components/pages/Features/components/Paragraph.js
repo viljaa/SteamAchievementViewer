@@ -15,11 +15,9 @@ const Paragraph = (props) =>{
     }
     return(
         <div>
-            <h4 className='title is-4 mb-2 active-title' onClick={toggle}><i class={props.icon}/>{props.title} <i class={isOpen ? "fas fa-angle-down ml-1":"fas fa-angle-up ml-1"}></i></h4>
+            <h4 className='title is-4 mb-2 active-title' onClick={toggle}><i className={props.icon}/>{props.title} <i className={isOpen ? "fas fa-angle-down ml-1":"fas fa-angle-up ml-1"}></i></h4>
             <div className={isOpen ? "paragraph-toggle is-active":"paragraph-toggle"}>
-                <p>
                 {props.content}
-                </p>
             </div>
         </div>
     )
