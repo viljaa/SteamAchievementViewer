@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import socket from '../../../socket/Socket';
+import {Link} from 'react-router-dom';
 
 /* Import styles */
 import '../../../App.scss';
@@ -27,9 +28,8 @@ const GameAchievementList = () =>{
 
     // useEffect hook that ensures achievement data will be available every time page is re-rendered
     useEffect(()=>{
-        const url = new URL(window.location.href);
-        const steamId = url.searchParams.get('steamId');
-        const appId = url.searchParams.get('appId');
+        const steamId = getParamFromURL('steamId');
+        const appId = getParamFromURL('appId');
 
         socket.emit('getGameAchievements', {
             steamId:steamId,
@@ -51,14 +51,25 @@ const GameAchievementList = () =>{
 
     })
 
+    /* Functions */
+    function getParamFromURL(param){
+        const url = new URL(window.location.href);
+        const urlParam = url.searchParams.get(param);
+        return urlParam;
+    }
+
     return(
         <div className='container is-max-widescreen'>
             <Navbar />
             <Loader visibility={loaderVisibility}/>
             <div className={contentVisibility}>
                 <div className='block' />
+                <Link className='button ml-1' to={`/userAchievements?steamId=${getParamFromURL('steamId')}&update=0`}>
+                    <i className='fas fa-arrow-left'></i>
+                </Link> 
                 <div className='tile is-parent'>
-                    <div className='tile is-child is-1'/>
+                    <div className='tile is-child is-1'>
+                    </div>
                     <div className='tile is-child'>
                         <h3 className='title is-3'>{gameName}</h3>
                         <div className='block' />

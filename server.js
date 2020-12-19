@@ -6,7 +6,7 @@ const path = require('path');
 const http = require('http');
 const socket = require('socket.io');
 require('dotenv').config();
-const dbQuery = require('./functions/queryFunctions.js');
+const dbQuery = require('./Functions/queryFunctions.js');
 
 /* Environment variables */
 const apiKey = process.env.API_KEY;
