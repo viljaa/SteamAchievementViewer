@@ -9,13 +9,18 @@ import Navbar from '../../elements/universal/Navbar';
 import Loader from '../../elements/universal/Loader';
 import ProfileData from './components/ProfileData';
 import DataLevel from './components/DataLevel';
+import GameCardSearchBar from './components/GameCardSearchBar';
 import GameSortBar from './components/GameSortBar';
 import GameInfoCard from '../../elements/cards/GameInfoCard';
 
 const UserAchievements = () =>{
     /* States */
-    // State stores an array, every index cointains object which contains achievement data for one appId
+
+    // State stores an array, every index cointains object which contains achievement data for one appId.
+    // Is used for reference as the original array when games are sorted by user search input.
     const [resultArray, setResultArray] = useState([]);
+    // State for storing array that is used for mapping results for user to view. Is sorted out of result array by user input.
+    const [viewArray,setViewArray]= useState([]);
 
     const [userProfileData, setUserProfileData] = useState([]);
     
@@ -36,6 +41,7 @@ const UserAchievements = () =>{
     /* Socket events */
     socket.on('gamelistData',(data)=>{
         setResultArray(data);
+        setViewArray(data);
         // Hide loader when results arrive, render content visible
         setLoaderVisibility('is-hidden');
         setContentVisibility('');
@@ -63,9 +69,10 @@ const UserAchievements = () =>{
                 }
                 <DataLevel data={{array:resultArray}} />
                 <hr className='hr'/>
-                <GameSortBar setter={setResultArray} data={resultArray}/>
+                <GameSortBar setter={setViewArray} data={viewArray}/>
+                <GameCardSearchBar setter={setViewArray} data={resultArray}/>
                 <div className='box' box-radius='large'>
-                    {resultArray.map((app)=>{
+                    {viewArray.map((app)=>{
                             // Define propsObj
                             const propsObj = {
                                 appId:app.appID,
